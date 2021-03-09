@@ -1,8 +1,8 @@
 import re
-from discord.ext import commands
-from auth import bot_token, report_channel_id, lesson_channel_id
-from report import Report, this_month, format_day
 from datetime import date, datetime, timedelta
+from discord.ext import commands
+from .auth import report_channel_id, lesson_channel_id
+from .report import Report, this_month, format_day
 
 
 class Bot(commands.Bot):
@@ -126,11 +126,3 @@ class Bot(commands.Bot):
                 lesson_duration = round((datetime.now() - self.current_lesson_start).total_seconds())
                 self.current_lesson_start = None
                 await self.record_lesson(date.today(), lesson_duration)
-        
-
-def main():
-    bot = Bot()
-    bot.run(bot_token)
-
-if __name__ == "__main__":
-    main()
