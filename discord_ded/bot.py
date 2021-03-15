@@ -100,9 +100,9 @@ class Bot(commands.Bot):
             else:
                 await ctx.send(f"No lessons on {when.day:02d}.{when.month:02d}.{when.year%100:02d}")
             
-    
     @property
     def report_channel(self):
+        """Text channel for report messages."""
         if self._report_channel is None:
             self._report_channel = self.get_channel(report_channel_id)
         
@@ -110,12 +110,18 @@ class Bot(commands.Bot):
     
     @property
     def lesson_channel(self):
+        """Voice channel where lessons are tracked."""
         if self._lesson_channel is None:
             self._lesson_channel = self.get_channel(lesson_channel_id)
         
         return self._lesson_channel
 
     async def record_lesson(self, when, duration, substract=False):
+        """Record a lesson at a date `when`, with `duration` in seconds.
+        If `substract` is True, then this function substracts this time from the records.
+        Returns the report in which the lesson was recorded. Note that if the lesson is substracted from a date for
+        which there is no report, this report is created but not posted anywhere.
+        """
         month = date(when.year, when.month, 1)
         report, message = await self.get_report(month)
 
@@ -136,7 +142,11 @@ class Bot(commands.Bot):
         return report
 
     async def get_report(self, when):
-        async for message in self.report_channel.history(limit=10):
+        """Retrieve a report from the records or create a new one.
+        Returns the Report object with date of `when` and the message in which the report was found.
+        If the report was just created, returns self.NoMessage instead of message.
+        """
+        async for message in self.report_channel.history(limit=100):
             try:
                 report = Report.fromstr(message.content)
             except:
@@ -148,6 +158,10 @@ class Bot(commands.Bot):
         return Report(when), self.NoMessage
     
     async def post_report(self, report, message=None):
+        """Post the report in the report channel.
+        If message is specified, edits the message with new information. Otherwise, tries to find the old report to
+        edit it, or just sends a new message.
+        """
         if message is None:
             _, message = await self.get_report(report.date)
 

@@ -4,11 +4,13 @@ from sortedcontainers import SortedDict
 
 
 def this_month():
+    """a datetime.date that represents day 1 of current month."""
     today = date.today()
     return date(today.year, today.month, 1)
 
 
 def format_day(when, duration):
+    """Format a day of lessons as `dd.mm.yy: n занятий (H:mm:ss)`."""
     lesson_count = round(duration / Report.lesson_duration)
 
     if lesson_count == 1:
@@ -25,6 +27,7 @@ def format_day(when, duration):
 
 
 class Report:
+    """A record of all lessons in one month."""
     lesson_duration = 60*60*1.5  # 1.5 hrs in seconds
 
     _re_title = re.compile(r"Занятия (\d+)\.(\d+) \(всего (\d+)\):")

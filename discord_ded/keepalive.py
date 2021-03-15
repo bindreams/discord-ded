@@ -12,6 +12,6 @@ def run_server():
     app.run(host='0.0.0.0', port=8080)
 
 def keepalive():
-    """Start a server in background to keep the bot alive."""
+    """Start a server in background to keep the bot alive on repl.it."""
     server = Thread(target=run_server)
     server.start()
