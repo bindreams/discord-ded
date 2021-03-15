@@ -30,8 +30,8 @@ class Report:
     _re_title = re.compile(r"Занятия (\d+)\.(\d+) \(всего (\d+)\):")
     _re_lesson = re.compile(r"(\d+).(\d+).(\d+): (\d+) заняти[еяй] \((\d+):(\d+):(\d+)\)")
 
-    def __init__(self):
-        self.date = this_month()
+    def __init__(self, date=None):
+        self.date = date or this_month()
 
         self.lessons = SortedDict()
     
