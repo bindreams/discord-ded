@@ -35,7 +35,19 @@ class Bot(commands.Bot):
             text = f"Дед жив\n{channel_info}\n{lesson_info}"
             await ctx.send(text)
 
-        @self.command()
+        @self.command(brief="Scare the bot")
+        async def scare(ctx):
+            await ctx.send("Вы напугали деда")
+
+        @self.command(brief="Display a motivational messge")
+        async def motivate(ctx):
+            data_dir = os.path.dirname(__file__) + "/data/"
+
+            with open(data_dir + 'motivate.png', 'rb') as f:
+                picture = File(f)
+                await ctx.send(file=picture)
+
+        @self.command(brief="Manually update lesson records")
         async def lesson(ctx):
             text = ctx.message.content
             
