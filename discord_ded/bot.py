@@ -18,7 +18,7 @@ class Bot(commands.Bot):
             no_category = 'Commands'
         )
 
-        super().__init__(command_prefix="!", help_command=help_command)
+        super().__init__(command_prefix="/", help_command=help_command)
         self.slash = SlashCommand(self)
         self.slash.slash()
 
