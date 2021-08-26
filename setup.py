@@ -4,6 +4,7 @@ install_requires = [
     "discord.py",
 	"sortedcontainers",
     "flask",
+    "discord-py-interactions"
 ]
 
 setup(
