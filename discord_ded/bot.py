@@ -8,7 +8,10 @@ from .report import Report, this_month, format_day
 
 
 class Bot(commands.Bot):
-    _re_lesson_command = re.compile(r"!lesson ([+-]=) (\d+)\.(\d+)\.(\d+) (\d+):(\d+):(\d+)\s*$")
+    prefix = "/"
+    _re_lesson_command = re.compile(
+        r"{prefix}lesson ([+-]=) (\d+)\.(\d+)\.(\d+) (\d+):(\d+):(\d+)\s*$".format(prefix=prefix)
+    )
 
     NoMessage = object()
 
@@ -17,9 +20,7 @@ class Bot(commands.Bot):
             no_category = 'Commands'
         )
 
-        super().__init__(command_prefix="/", help_command=help_command)
-        self.slash.slash()
-
+        super().__init__(command_prefix=prefix, help_command=help_command)
         self._report_channel = None
         self._lesson_channel = None
         self.current_lesson_start = None
