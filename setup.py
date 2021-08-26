@@ -3,8 +3,7 @@ from setuptools import setup, find_packages
 install_requires = [
     "discord.py",
 	"sortedcontainers",
-    "flask",
-    "discord-py-interactions"
+    "flask"
 ]
 
 setup(
