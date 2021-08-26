@@ -26,7 +26,7 @@ class Bot(commands.Bot):
         self._lesson_channel = None
         self.current_lesson_start = None
 
-        @self.slash.slash(name="status", description="Display bot status")
+        @self.slash.slash(name="status", description="Display bot status", guild_ids=[733992783555198976])
         async def status(ctx):
             if self.current_lesson_start is None:
                 lesson_info = f"Занятие не идет"
@@ -39,11 +39,11 @@ class Bot(commands.Bot):
             text = f"Дед жив\n{channel_info}\n{lesson_info}"
             await ctx.send(text)
 
-        @self.slash.slash(name="scare", description="Scare the bot")
+        @self.slash.slash(name="scare", description="Scare the bot", guild_ids=[733992783555198976])
         async def scare(ctx):
             await ctx.send("Вы напугали деда")
 
-        @self.slash.slash(name="motivate", description="Display a motivational messge")
+        @self.slash.slash(name="motivate", description="Display a motivational messge", guild_ids=[733992783555198976])
         async def motivate(ctx):
             data_dir = os.path.dirname(__file__) + "/data/"
 
@@ -51,7 +51,7 @@ class Bot(commands.Bot):
                 picture = File(f)
                 await ctx.send(file=picture)
 
-        @self.slash.slash(name="lesson", description="Manually update lesson records")
+        @self.slash.slash(name="lesson", description="Manually update lesson records", guild_ids=[733992783555198976])
         async def lesson(ctx):
             text = ctx.message.content
             
