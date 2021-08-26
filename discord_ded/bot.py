@@ -3,6 +3,7 @@ import os
 from datetime import date, datetime, timedelta
 from discord import File
 from discord.ext import commands
+from discord_slash import SlashCommand
 from .auth import report_channel_id, lesson_channel_id
 from .report import Report, this_month, format_day
 
@@ -18,11 +19,14 @@ class Bot(commands.Bot):
         )
 
         super().__init__(command_prefix="!", help_command=help_command)
+        self.slash = SlashCommand(self)
+        self.slash.slash()
+
         self._report_channel = None
         self._lesson_channel = None
         self.current_lesson_start = None
 
-        @self.command(brief="Display bot status")
+        @self.slash.slash(description="Display bot status")
         async def status(ctx):
             if self.current_lesson_start is None:
                 lesson_info = f"Занятие не идет"
@@ -35,11 +39,11 @@ class Bot(commands.Bot):
             text = f"Дед жив\n{channel_info}\n{lesson_info}"
             await ctx.send(text)
 
-        @self.command(brief="Scare the bot")
+        @self.slash.slash(description="Scare the bot")
         async def scare(ctx):
             await ctx.send("Вы напугали деда")
 
-        @self.command(brief="Display a motivational messge")
+        @self.slash.slash(description="Display a motivational messge")
         async def motivate(ctx):
             data_dir = os.path.dirname(__file__) + "/data/"
 
@@ -47,7 +51,7 @@ class Bot(commands.Bot):
                 picture = File(f)
                 await ctx.send(file=picture)
 
-        @self.command(brief="Manually update lesson records")
+        @self.slash.slash(description="Manually update lesson records")
         async def lesson(ctx):
             text = ctx.message.content
             
