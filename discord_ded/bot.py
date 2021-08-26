@@ -20,7 +20,7 @@ class Bot(commands.Bot):
             no_category = 'Commands'
         )
 
-        super().__init__(command_prefix=prefix, help_command=help_command)
+        super().__init__(command_prefix=self.prefix, help_command=help_command)
         self._report_channel = None
         self._lesson_channel = None
         self.current_lesson_start = None
