@@ -1,0 +1,3 @@
+bot_token: "<your bot token>"
+report_channel_id: 123456789012345678
+lesson_channel_id: 987654321098765432

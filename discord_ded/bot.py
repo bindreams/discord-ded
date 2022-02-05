@@ -1,11 +1,12 @@
-import re
 import os
+import re
 from datetime import date, datetime, timedelta
+
+import yaml
 from discord import File
 from discord.ext import commands
-import yaml
-from .report import Report, this_month, format_day
 
+from .report import Report, format_day
 
 
 class Bot(commands.Bot):
@@ -16,9 +17,9 @@ class Bot(commands.Bot):
 
     NoMessage = object()
 
-    def __init__(self):
+    def __init__(self, *, report_channel_id, lesson_channel_id):
         help_command = commands.DefaultHelpCommand(
-            no_category = 'Commands'
+            no_category='Commands'
         )
 
         super().__init__(command_prefix=self.prefix, help_command=help_command)
@@ -26,17 +27,16 @@ class Bot(commands.Bot):
         self._lesson_channel = None
         self.current_lesson_start = None
 
-        with open("/etc/discord-ded.conf", "r") as f:
-            data = yaml.safe_load(f)
-            self.report_channel_id = data["report_channel_id"]
-            self.lesson_channel_id = data["lesson_channel_id"]
+        self.report_channel_id = report_channel_id
+        self.lesson_channel_id = lesson_channel_id
 
         @self.command(brief="Display bot status")
         async def status(ctx):
             if self.current_lesson_start is None:
-                lesson_info = f"Занятие не идет"
+                lesson_info = "Занятие не идет"
             else:
-                seconds = round((datetime.now() - self.current_lesson_start).total_seconds())
+                seconds = round(
+                    (datetime.now() - self.current_lesson_start).total_seconds())
                 lesson_info = f"Занятие в процессе ({timedelta(seconds=seconds)})"
 
             channel_info = f"Человек в канале: {len(self.lesson_channel.members)}"
@@ -93,7 +93,8 @@ class Bot(commands.Bot):
                     raise ValueError("неверное значение для секунд")
 
                 when = date(year, int(match[3]), int(match[2]))
-                duration = timedelta(hours=int(match[5]), minutes=int(match[6]), seconds=int(match[7])).total_seconds()
+                duration = timedelta(hours=int(match[5]), minutes=int(
+                    match[6]), seconds=int(match[7])).total_seconds()
 
             except ValueError as err:
                 await ctx.send(
@@ -200,6 +201,7 @@ class Bot(commands.Bot):
             print(f"  Someone left, now {len(self.lesson_channel.members)}")
             # Someone left the channel
             if len(self.lesson_channel.members) < 2 and self.current_lesson_start is not None:
-                lesson_duration = round((datetime.now() - self.current_lesson_start).total_seconds())
+                lesson_duration = round(
+                    (datetime.now() - self.current_lesson_start).total_seconds())
                 self.current_lesson_start = None
                 await self.record_lesson(date.today(), lesson_duration)
