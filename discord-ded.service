@@ -1,0 +1,10 @@
+[Unit]
+Description=Discord Lesson Bot
+After=network-online.target
+
+[Service]
+Restart=always
+ExecStart=discord-ded -c /etc/discord-ded.conf
+
+[Install]
+WantedBy=multi-user.target
