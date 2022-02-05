@@ -7,6 +7,10 @@ install_requires = [
     "PyYAML"
 ]
 
+entry_points = {
+    "console_scripts": ["discord-ded = discord_ded.__main__:main"],
+}
+
 setup(
     name="discord-ded",
     version="0.2.0",
@@ -15,5 +19,6 @@ setup(
     author_email="andres.zhukov@gmail.com",
     license="MIT",
     install_requires=install_requires,
-    packages=find_packages()
+    packages=find_packages(),
+    entry_points=entry_points
 )
