@@ -12,7 +12,7 @@ entry_points = {
 
 setup(
     name="discord-ded",
-    version="0.2.0",
+    version="0.3.0",
     description="Discord lesson bot",
     author="Andrey Zhukov",
     author_email="andres.zhukov@gmail.com",
