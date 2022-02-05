@@ -1,2 +1,0 @@
-language = "bash"
-run = "pip install -e . && python -m discord_ded --keep-alive"
