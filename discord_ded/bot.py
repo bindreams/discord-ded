@@ -39,7 +39,7 @@ class Bot(commands.Bot):
                     (datetime.now() - self.current_lesson_start).total_seconds())
                 lesson_info = f"Занятие в процессе ({timedelta(seconds=seconds)})"
 
-            channel_info = f"Человек в канале: {len(self.lesson_channel.members)}"
+            channel_info = f"Человек в канале: {len(self.lesson_participants())}"
 
             text = f"Дед жив\n{channel_info}\n{lesson_info}"
             await ctx.send(text)
@@ -183,6 +183,9 @@ class Bot(commands.Bot):
     async def on_ready(self):
         print(f'Logged on as {self.user}!')
 
+    def lesson_participants(self):
+        return list(self.lesson_channel.voice_states.keys())
+
     async def on_voice_state_update(self, member, before, after):
         """If 2 or more people join self.lesson_channel, start tracking the lesson. When one leaves, stops tracking."""
 
@@ -192,15 +195,15 @@ class Bot(commands.Bot):
             return
 
         if after.channel == self.lesson_channel:
-            print(f"  Someone joined, now {len(self.lesson_channel.members)}")
+            print(f"  Someone joined, now {len(self.lesson_participants())}")
             # Someone joined the channel
-            if len(self.lesson_channel.members) >= 2 and self.current_lesson_start is None:
+            if len(self.lesson_participants()) >= 2 and self.current_lesson_start is None:
                 self.current_lesson_start = datetime.now()
 
         if before.channel == self.lesson_channel:
-            print(f"  Someone left, now {len(self.lesson_channel.members)}")
+            print(f"  Someone left, now {len(self.lesson_participants())}")
             # Someone left the channel
-            if len(self.lesson_channel.members) < 2 and self.current_lesson_start is not None:
+            if len(self.lesson_participants()) < 2 and self.current_lesson_start is not None:
                 lesson_duration = round(
                     (datetime.now() - self.current_lesson_start).total_seconds())
                 self.current_lesson_start = None
