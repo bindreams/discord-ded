@@ -1,12 +1,15 @@
 import os
 import re
 from datetime import date, datetime, timedelta
+from pathlib import Path
+from random import randrange
 
-import yaml
 from discord import File
 from discord.ext import commands
 
 from .report import Report, format_day
+
+datadir = os.path.dirname(__file__) + "/data"
 
 
 class Bot(commands.Bot):
@@ -50,11 +53,12 @@ class Bot(commands.Bot):
 
         @self.command(brief="Display a motivational messge")
         async def motivate(ctx):
-            data_dir = os.path.dirname(__file__) + "/data/"
+            pictures = list(Path(datadir).iterdir())
+            picture = pictures[randrange(0, len(pictures))]
 
-            with open(data_dir + 'motivate.png', 'rb') as f:
-                picture = File(f)
-                await ctx.send(file=picture)
+            with open(picture, "rb") as f:
+                picture_file = File(f)
+                await ctx.send(file=picture_file)
 
         @self.command(brief="Manually update lesson records")
         async def lesson(ctx):
