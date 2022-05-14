@@ -13,7 +13,7 @@ datadir = os.path.dirname(__file__) + "/data"
 
 
 class Bot(commands.Bot):
-    prefix = "/"
+    prefix = "!"
     _re_lesson_command = re.compile(
         r"{prefix}lesson ([+-]=) (\d+)\.(\d+)\.(\d+) (\d+):(\d+):(\d+)\s*$".format(prefix=prefix)
     )
